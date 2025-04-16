@@ -1,9 +1,8 @@
 -- Dũng Hub - Giao diện Hoho Hub - Full Features
 -- Không cần key - Tương thích Xeno Executor 1.1.75
 
-local Logo = "https://raw.githubusercontent.com/dunghubteam/assets/main/logo.png"
-
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/HohoHub-V2/UI-Library/main/Library.lua"))()
+local Logo = "https://raw.githubusercontent.com/dunxzd/Dunxhub/main/boruto_logo.png"
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/HoHoHub-V2/UI-Library/main/Library.lua"))()
 local Window = Library:CreateWindow("Dũng Hub", Logo)
 
 local player = game.Players.LocalPlayer
@@ -21,7 +20,7 @@ MainTab:AddToggle("Auto Farm Level", false, function(v)
     _G.AutoFarm = v
     while _G.AutoFarm do
         task.wait()
-        -- logic auto farm
+        -- logic auto farm ở đây
     end
 end)
 
@@ -29,7 +28,7 @@ MainTab:AddToggle("Auto Farm Boss", false, function(v)
     _G.AutoBoss = v
     while _G.AutoBoss do
         task.wait()
-        -- logic auto boss
+        -- logic auto boss ở đây
     end
 end)
 
@@ -39,20 +38,20 @@ TeleportTab:AddButton("Đảo Chính", function()
 end)
 
 TeleportTab:AddButton("Đảo Băng", function()
-    player.Character.HumanoidRootPart.CFrame = CFrame.new(1200, 50, -1450)
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(1038, 50, 4150)
 end)
 
 -- Fruit Notifier
-FruitTab:AddToggle("Thông báo trái cây xuất hiện", false, function(v)
-    _G.NotifyFruit = v
-    while _G.NotifyFruit do
+FruitTab:AddToggle("Bật Thông Báo Trái Cây", false, function(v)
+    _G.FruitNotify = v
+    while _G.FruitNotify do
         task.wait(5)
-        for _, obj in pairs(Workspace:GetChildren()) do
-            if string.find(obj.Name:lower(), "fruit") then
+        for i, v in pairs(Workspace:GetChildren()) do
+            if v:IsA("Tool") and string.find(v.Name, "Fruit") then
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Dũng Hub",
-                    Text = "Trái cây: " .. obj.Name .. " tại vị trí: " .. tostring(math.floor(obj.Position.X)) .. ", " .. math.floor(obj.Position.Z),
-                    Duration = 5
+                    Title = "Thông Báo Trái Cây",
+                    Text = "Đã phát hiện trái: " .. v.Name,
+                    Duration = 10
                 })
             end
         end
@@ -60,28 +59,26 @@ FruitTab:AddToggle("Thông báo trái cây xuất hiện", false, function(v)
 end)
 
 -- ESP
-EspTab:AddToggle("Bật ESP Player", false, function(v)
-    _G.ESPPlayer = v
-    while _G.ESPPlayer do
-        task.wait(1)
+EspTab:AddToggle("ESP Người Chơi", false, function(v)
+    _G.PlayerESP = v
+    while _G.PlayerESP do
+        task.wait()
         for _, plr in pairs(game.Players:GetPlayers()) do
-            if plr ~= player and plr.Character and not plr.Character:FindFirstChild("ESP") then
-                local Billboard = Instance.new("BillboardGui", plr.Character)
-                Billboard.Name = "ESP"
-                Billboard.Size = UDim2.new(0,100,0,40)
-                Billboard.Adornee = plr.Character:WaitForChild("Head")
-                Billboard.AlwaysOnTop = true
+            if plr ~= player and plr.Character and plr.Character:FindFirstChild("Head") and not plr.Character.Head:FindFirstChild("NameESP") then
+                local bill = Instance.new("BillboardGui", plr.Character.Head)
+                bill.Name = "NameESP"
+                bill.Size = UDim2.new(0, 100, 0, 40)
+                bill.AlwaysOnTop = true
+                bill.StudsOffset = Vector3.new(0, 2, 0)
 
-                local TextLabel = Instance.new("TextLabel", Billboard)
-                TextLabel.Size = UDim2.new(1,0,1,0)
-                TextLabel.Text = plr.Name
-                TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-                TextLabel.BackgroundTransparency = 1
+                local name = Instance.new("TextLabel", bill)
+                name.Size = UDim2.new(1, 0, 1, 0)
+                name.BackgroundTransparency = 1
+                name.Text = plr.Name
+                name.TextColor3 = Color3.fromRGB(255, 0, 0)
+                name.TextStrokeTransparency = 0
             end
         end
     end
 end)
-
--- Giao diện hoàn chỉnh - Dũng Hub
-Library:Init()
 
